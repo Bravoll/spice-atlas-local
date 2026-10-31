@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "target_version": "0.9.0",
+  "status": "planning_only",
+  "runtime_enabled": false,
+  "baseline": {
+    "source_commit": "bf1855ca992d3afd3d03adb9fea6e5ff20c41b28",
+    "tree": "f0aa230d354835986269d213af6529e4dfb43d81",
+    "remote_verified": true,
+    "approved_full_zip_sha256": "edfabd967601fa71813771032598279d8c9bb1e198ab753eb54917100645503d",
+    "approved_patch_zip_sha256": "799152c88be4414eaf80f4a6ce58491ab8903d08906de105ff24afe9e50bccc9"
+  },
+  "automatic_mode": {
+    "candidate_order": "browser_preferences",
+    "fallback": "en",
+    "content_auto": "effective_ui_locale",
+    "translation_auto": "effective_ui_locale",
+    "domestic_sources_only_when": {"ui_mode": "auto", "effective_ui_locale": "zh-Hans"}
+  },
+  "locales": [
+    {"code": "zh-Hans", "autonym": "简体中文", "script": "Hans", "direction": "ltr", "wiki_language": "zh", "wiki_variant": "zh-hans", "scope": "existing", "region_examples": ["zh-CN", "zh-SG"]},
+    {"code": "zh-Hant", "autonym": "繁體中文", "script": "Hant", "direction": "ltr", "wiki_language": "zh", "wiki_variant": "zh-hant", "scope": "existing", "region_examples": ["zh-TW", "zh-HK", "zh-MO"]},
+    {"code": "en", "autonym": "English", "script": "Latn", "direction": "ltr", "wiki_language": "en", "scope": "existing", "region_examples": ["en-AU", "en-GB", "en-US"]},
+    {"code": "es", "autonym": "Español", "script": "Latn", "direction": "ltr", "wiki_language": "es", "scope": "planned", "region_examples": ["es-ES", "es-MX"]},
+    {"code": "fr", "autonym": "Français", "script": "Latn", "direction": "ltr", "wiki_language": "fr", "scope": "planned", "region_examples": ["fr-FR", "fr-CA"]},
+    {"code": "de", "autonym": "Deutsch", "script": "Latn", "direction": "ltr", "wiki_language": "de", "scope": "planned", "region_examples": ["de-DE", "de-AT"]},
+    {"code": "ja", "autonym": "日本語", "script": "Jpan", "direction": "ltr", "wiki_language": "ja", "scope": "planned", "region_examples": ["ja-JP"]},
+    {"code": "ko", "autonym": "한국어", "script": "Kore", "direction": "ltr", "wiki_language": "ko", "scope": "planned", "region_examples": ["ko-KR"]},
+    {"code": "ru", "autonym": "Русский", "script": "Cyrl", "direction": "ltr", "wiki_language": "ru", "scope": "planned", "region_examples": ["ru-RU"]},
+    {"code": "pt", "autonym": "Português", "script": "Latn", "direction": "ltr", "wiki_language": "pt", "scope": "optional", "region_examples": ["pt-BR", "pt-PT"]}
+  ],
+  "deferred": [{"code": "ar", "direction": "rtl", "reason": "separate_later_scope"}]
+}
