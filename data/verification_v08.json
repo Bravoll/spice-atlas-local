@@ -1,0 +1,702 @@
+{
+  "version": "0.8.0",
+  "build": "0.8-review4",
+  "status": "validated-review-candidate",
+  "base_commit": "b2a3fffec7ca1a9c29bef7ec38cd77165f32f108",
+  "backend": {
+    "passed": true,
+    "tests": 227
+  },
+  "ui": {
+    "passed": true,
+    "checks": 190,
+    "suites": 14
+  },
+  "browser": {
+    "content": "clearly labelled synthetic QA articles",
+    "observed": [
+      "English/Chinese and Chinese/English name order",
+      "Times New Roman localized alias and selected family",
+      "reading hides low-frequency controls",
+      "chapter navigation and active mark",
+      "680px narrow reading without horizontal overflow",
+      "Home retains reading mode and clears temporary query",
+      "1000×500 exploratory header: all seven controls aligned at y=34; main height 397px",
+      "article font family saved through Aa drawer",
+      "header local search returned recorded names and scientific identities",
+      "review2: collapsed chapter links are 26×32px, inside visible capsule",
+      "review2: chapter row y positions remain 249.48, 281.48, 313.48 after expansion",
+      "review2: second row click selects fixture-classification; heading top 185.20px",
+      "release check: clicking second chapter keeps the correct active row; collapsed and expanded rows remain 32px at matching positions"
+    ],
+    "native_font_permission_prompt_tested": false,
+    "sizes": [
+      [
+        1363,
+        936
+      ],
+      [
+        680,
+        820
+      ],
+      [
+        1000,
+        500
+      ]
+    ]
+  },
+  "limits": [
+    "native Windows GUI/tray not tested",
+    "font inventory permissions tested using controlled stubs, not actual native prompt",
+    "font installation/glyph coverage not guaranteed",
+    "no fresh external provider availability audit in this round",
+    "audio and 120Hz not measured",
+    "15,798 Chinese common names and 15,473 English common names unconfirmed; no generated names",
+    "Helper 0.8.2 native installation and real Chrome/Edge split views not tested in this environment"
+  ],
+  "name_audit": {
+    "revision": "names-20261031-v08-review2",
+    "checked_at": "2026-10-31T06:22:10+00:00",
+    "checklist_taxonomy": 148,
+    "wikidata_exact": 559,
+    "total": 18379,
+    "chinese_missing_before": 16844,
+    "chinese_available": 2581,
+    "english_available": 2906,
+    "chinese_missing": 15798,
+    "english_missing": 15473,
+    "chinese_added": 1046,
+    "chinese_changed": 1787,
+    "english_changed": 15527,
+    "chinese_documented": 2581,
+    "english_documented": 2906,
+    "gbif_exact": 17830,
+    "nodes_total": 959,
+    "nodes_named_zh": 448,
+    "nodes_scientific_only": 511,
+    "identity_conflicts": 0,
+    "material_scope_notes": 4,
+    "method": "Exact scientific names and original source IDs. Source-documented vernaculars, not invented translations. Missing names remain explicit.",
+    "source_versions": {
+      "cas": {
+        "name": "Catalogue of Life China 2023 · CAS",
+        "url": "https://www.gbifchina.org.cn/resource?r=chinacol2023&v=1.1",
+        "license": "CC BY-NC 4.0",
+        "version": "1.1",
+        "citation": "The Biodiversity Committee of Chinese Academy of Sciences (2024). Catalogue of Life China 2023 Annual Checklist. Version 1.1. Chinese Academy of Sciences. https://doi.org/10.15468/ae6ush"
+      },
+      "taicol": {
+        "name": "TaiCOL · TaiBIF",
+        "url": "https://ipt.taibif.tw/resource?r=taibnet_com_all&v=1.13",
+        "license": "CC BY 4.0",
+        "version": "1.13",
+        "citation": "Shao K (2024). The National Checklist of Taiwan (Catalogue of Life in Taiwan, TaiCOL). v1.13. Taiwan Biodiversity Information Facility. https://doi.org/10.15468/auw1kd"
+      },
+      "wikidata": {
+        "name": "Wikidata · exact P225",
+        "url": "https://www.wikidata.org/",
+        "license": "CC0"
+      },
+      "gbif": {
+        "name": "GBIF Backbone Taxonomy",
+        "url": "https://www.gbif.org/dataset/d7dddbf4-2cf0-4f39-9b2a-bb099caae36c",
+        "license": "CC BY 4.0"
+      },
+      "editorial": {
+        "name": "Curated ingredient record",
+        "url": "",
+        "license": "project editorial metadata"
+      },
+      "existing": {
+        "name": "Previously imported name · not independently confirmed",
+        "url": "",
+        "license": "see original record"
+      }
+    }
+  },
+  "previous_review_release_verification": {
+    "archive_integrity": true,
+    "first_start": {
+      "passed": true,
+      "version": "0.8.0",
+      "records": 18379,
+      "audit_decisions": 699,
+      "checks": [
+        "fresh workspace initialization",
+        "clean catalogue and JDB exclusion",
+        "default settings and no saved keys",
+        "English scientific labels preserve raw metadata",
+        "local pinyin and random exclusion",
+        "expanded/responsive view persistence",
+        "view excludes unknown secret fields",
+        "unmanaged shutdown unavailable",
+        "settings roundtrip",
+        "all new static assets served",
+        "application lifespan shutdown"
+      ]
+    },
+    "managed_real_http": {
+      "passed": true,
+      "entrypoint": "launch.py --managed --no-browser",
+      "real_local_http": true,
+      "instance_matched": true,
+      "wrong_key_status": 403,
+      "pause_resume_same_instance": true,
+      "pre_pause_sse_before_content_gate": true,
+      "paused_notification_dismissal": true,
+      "resume_requires_manual_retest": true,
+      "manual_retest_started": true,
+      "paused_content_status": 503,
+      "shutdown_status": 200,
+      "exit_code": 0,
+      "external_health_probes": "disabled for isolated smoke"
+    },
+    "native_windows_tested": false,
+    "hash_note": "Final ZIP SHA-256 is in the external verification report to avoid a self-referential archive checksum."
+  },
+  "previous_review_incremental_upgrade": {
+    "passed": true,
+    "cases": [
+      {
+        "case": "v06-through-v07-to-v08-full-chain",
+        "passed": true,
+        "source_installation": "Spice_Atlas_Local_v0.6.zip",
+        "folder_name_retained": true,
+        "protected_files_unchanged_before_first_start": 14,
+        "dry_run_read_only": true,
+        "steps": [
+          "v0.6.0-to-v0.7.0",
+          "v0.7.0-to-v0.8.0"
+        ],
+        "backup_present": true,
+        "new_app_started": true,
+        "favorites": 1,
+        "history_visits": 2,
+        "workspaces": 2,
+        "ui_language": "zh-Hant",
+        "reader_size": 23,
+        "cache_packet_retained": true,
+        "media_retained": true
+      },
+      {
+        "case": "v07-to-v08-small-patch",
+        "passed": true,
+        "source_installation": "Spice_Atlas_Local_v0.7.zip",
+        "folder_name_retained": true,
+        "protected_files_unchanged_before_first_start": 14,
+        "dry_run_read_only": true,
+        "steps": [
+          "v0.7.0-to-v0.8.0"
+        ],
+        "backup_present": true,
+        "new_app_started": true,
+        "favorites": 1,
+        "history_visits": 2,
+        "workspaces": 2,
+        "ui_language": "zh-Hant",
+        "reader_size": 23,
+        "cache_packet_retained": true,
+        "media_retained": true
+      }
+    ],
+    "external_health_probes": "disabled",
+    "native_windows_tested": false
+  },
+  "publication_checks": {
+    "date": "2026-10-31",
+    "user_authorized_commit_push": true,
+    "backend": {
+      "passed": true,
+      "tests": 227,
+      "rerun_on_approved_review2": true
+    },
+    "ui": {
+      "passed": true,
+      "checks": 158,
+      "suites": 12,
+      "rerun_on_final_source": true
+    },
+    "source_seed": {
+      "compressed_restore": true,
+      "checksum_matches": true,
+      "sqlite_integrity": "ok",
+      "records": 18379,
+      "fresh_api_start": true,
+      "audited_names_searchable": true
+    },
+    "additional_fix": "Restore whole-page exploration scroll when exiting reading mode; retain obsolete-request guards.",
+    "previous_zip_upgrade_evidence": "Retained from the approved review2 package; release metadata and source seed preparation do not change the updater."
+  },
+  "previous_review2_release_verification": {
+    "archive_integrity": true,
+    "first_start": {
+      "passed": true,
+      "version": "0.8.0",
+      "records": 18379,
+      "audit_decisions": 699,
+      "checks": [
+        "fresh workspace initialization",
+        "clean catalogue and JDB exclusion",
+        "default settings and no saved keys",
+        "English scientific labels preserve raw metadata",
+        "local pinyin and random exclusion",
+        "expanded/responsive view persistence",
+        "view excludes unknown secret fields",
+        "unmanaged shutdown unavailable",
+        "settings roundtrip",
+        "all new static assets served",
+        "application lifespan shutdown",
+        "source-backed Perilla / Clerodendrum / Tectona names",
+        "new Chinese names searchable locally",
+        "explicit unconfirmed-name coverage"
+      ]
+    },
+    "managed_real_http": {
+      "passed": true,
+      "entrypoint": "launch.py --managed --no-browser",
+      "real_local_http": true,
+      "instance_matched": true,
+      "wrong_key_status": 403,
+      "pause_resume_same_instance": true,
+      "pre_pause_sse_before_content_gate": true,
+      "paused_notification_dismissal": true,
+      "resume_requires_manual_retest": true,
+      "manual_retest_started": true,
+      "paused_content_status": 503,
+      "shutdown_status": 200,
+      "exit_code": 0,
+      "external_health_probes": "disabled for isolated smoke"
+    },
+    "native_windows_tested": false,
+    "hash_note": "Final ZIP SHA-256 is in the external verification report to avoid a self-referential archive checksum."
+  },
+  "previous_review2_incremental_upgrade": {
+    "passed": true,
+    "cases": [
+      {
+        "case": "v06-through-v07-to-v08-full-chain",
+        "passed": true,
+        "source_installation": "Spice_Atlas_Local_v0.6.zip",
+        "folder_name_retained": true,
+        "protected_files_unchanged_before_first_start": 14,
+        "dry_run_read_only": true,
+        "steps": [
+          "v0.6.0-to-v0.7.0",
+          "v0.7.0-to-v0.8.0"
+        ],
+        "backup_present": true,
+        "setup": {
+          "active": "14573400daa146c3a3e032ef2bd81909",
+          "versions": 2
+        },
+        "new_app_started": true,
+        "favorites": 1,
+        "history_visits": 2,
+        "workspaces": 2,
+        "ui_language": "zh-Hant",
+        "reader_size": 23,
+        "cache_packet_retained": true,
+        "media_retained": true
+      },
+      {
+        "case": "v07-to-v08-small-patch",
+        "passed": true,
+        "source_installation": "Spice_Atlas_Local_v0.7.zip",
+        "folder_name_retained": true,
+        "protected_files_unchanged_before_first_start": 14,
+        "dry_run_read_only": true,
+        "steps": [
+          "v0.7.0-to-v0.8.0"
+        ],
+        "backup_present": true,
+        "setup": {
+          "active": "a7b0a25e6e8949d4aac3bcfe53bdc1da",
+          "versions": 2
+        },
+        "new_app_started": true,
+        "favorites": 1,
+        "history_visits": 2,
+        "workspaces": 2,
+        "ui_language": "zh-Hant",
+        "reader_size": 23,
+        "cache_packet_retained": true,
+        "media_retained": true
+      },
+      {
+        "case": "v08-review1-to-review2-same-version",
+        "passed": true,
+        "source_installation": "Spice_Atlas_Local_v0.8.zip",
+        "folder_name_retained": true,
+        "protected_files_unchanged_before_first_start": 14,
+        "dry_run_read_only": true,
+        "steps": [
+          "v0.7.0-to-v0.8.0"
+        ],
+        "backup_present": true,
+        "setup": {
+          "active": "1af6e8e5a21a4c2cbbd1db5c9eca296e",
+          "versions": 2
+        },
+        "new_app_started": true,
+        "favorites": 1,
+        "history_visits": 2,
+        "workspaces": 2,
+        "ui_language": "zh-Hant",
+        "reader_size": 23,
+        "cache_packet_retained": true,
+        "media_retained": true
+      }
+    ],
+    "native_windows_tested": false,
+    "external_health_probes": "disabled",
+    "naming_checks": [
+      "Perilla and Tectona repaired",
+      "user-edited Hyssop name and alias retained",
+      "original SQLite backup created on first access"
+    ]
+  },
+  "extension_fix": {
+    "helper_version": "0.8.2",
+    "native_installation_tested": false,
+    "native_split_tested": false,
+    "method": "Controlled extension API and page/content-script/service-worker messaging fixtures, not native browser installation.",
+    "new_cross_context_checks": 14,
+    "regressions": [
+      "late content-script injection and missed initial capability request",
+      "top-level MessageSender.url without optional Tab.url",
+      "empty responses do not crash the page",
+      "explicit createSplit with matching pinned/group states and verified pair IDs",
+      "policy refusal reuses a standalone helper tab",
+      "no native API does not create a pretend split",
+      "source checks longer than 30 seconds",
+      "manual retry reconnects",
+      "no real gesture and stale-entry responses do not open tabs",
+      "thumbnail results with denied original-site embedding still offer a split",
+      "an older loaded helper is identified and asks for an extension reload"
+    ],
+    "installation": "Reload existing helper in extension management, then refresh Atlas in that same browser."
+  },
+  "previous_review3_release_verification": {
+    "archive_integrity": true,
+    "first_start": {
+      "passed": true,
+      "version": "0.8.0",
+      "records": 18379,
+      "audit_decisions": 699,
+      "checks": [
+        "fresh workspace initialization",
+        "clean catalogue and JDB exclusion",
+        "default settings and no saved keys",
+        "English scientific labels preserve raw metadata",
+        "local pinyin and random exclusion",
+        "expanded/responsive view persistence",
+        "view excludes unknown secret fields",
+        "unmanaged shutdown unavailable",
+        "settings roundtrip",
+        "all new static assets served",
+        "application lifespan shutdown"
+      ]
+    },
+    "managed_real_http": {
+      "passed": true,
+      "entrypoint": "launch.py --managed --no-browser",
+      "real_local_http": true,
+      "instance_matched": true,
+      "wrong_key_status": 403,
+      "pause_resume_same_instance": true,
+      "pre_pause_sse_before_content_gate": true,
+      "paused_notification_dismissal": true,
+      "resume_requires_manual_retest": true,
+      "manual_retest_started": true,
+      "paused_content_status": 503,
+      "shutdown_status": 200,
+      "exit_code": 0,
+      "external_health_probes": "disabled for isolated smoke"
+    },
+    "native_windows_tested": false,
+    "hash_note": "Final ZIP SHA-256 is checked externally; embedded results do not contain their own archive checksum."
+  },
+  "previous_review3_incremental_upgrade": {
+    "passed": true,
+    "cases": [
+      {
+        "case": "v06-through-v07-to-v08-review3",
+        "passed": true,
+        "source_installation": "Spice_Atlas_Local_v0.6.zip",
+        "folder_name_retained": true,
+        "protected_files_unchanged_before_first_start": 14,
+        "dry_run_read_only": true,
+        "steps": [
+          "v0.6.0-to-v0.7.0",
+          "v0.7.0-to-v0.8.0"
+        ],
+        "backup_present": true,
+        "setup": {
+          "active": "416d68d6bfdf4c63bac6d2b9801b37ac",
+          "versions": 2
+        },
+        "new_app_started": true,
+        "favorites": 1,
+        "history_visits": 2,
+        "workspaces": 2,
+        "ui_language": "zh-Hant",
+        "reader_size": 23,
+        "cache_packet_retained": true,
+        "media_retained": true
+      },
+      {
+        "case": "v07-to-v08-review3",
+        "passed": true,
+        "source_installation": "Spice_Atlas_Local_v0.7.zip",
+        "folder_name_retained": true,
+        "protected_files_unchanged_before_first_start": 14,
+        "dry_run_read_only": true,
+        "steps": [
+          "v0.7.0-to-v0.8.0"
+        ],
+        "backup_present": true,
+        "setup": {
+          "active": "c36952e6f7de469ca1cfe8b283d28795",
+          "versions": 2
+        },
+        "new_app_started": true,
+        "favorites": 1,
+        "history_visits": 2,
+        "workspaces": 2,
+        "ui_language": "zh-Hant",
+        "reader_size": 23,
+        "cache_packet_retained": true,
+        "media_retained": true
+      },
+      {
+        "case": "v08-review2-to-review3-same-version",
+        "passed": true,
+        "source_installation": "Spice_Atlas_Local_v0.8.zip",
+        "folder_name_retained": true,
+        "protected_files_unchanged_before_first_start": 14,
+        "dry_run_read_only": true,
+        "steps": [
+          "v0.7.0-to-v0.8.0"
+        ],
+        "backup_present": true,
+        "setup": {
+          "active": "ba200967c13a41a88fa7bb0bf7256e5a",
+          "versions": 2
+        },
+        "new_app_started": true,
+        "favorites": 1,
+        "history_visits": 2,
+        "workspaces": 2,
+        "ui_language": "zh-Hant",
+        "reader_size": 23,
+        "cache_packet_retained": true,
+        "media_retained": true
+      }
+    ],
+    "native_windows_tested": false,
+    "extension_installation_tested": false,
+    "external_health_probes": "disabled"
+  },
+  "extension_lifecycle": {
+    "helper_version": "0.8.2",
+    "protocol_version": 2,
+    "checks": 18,
+    "native_ratio_control": false,
+    "native_windows_tested": false,
+    "native_extension_installation_tested": false,
+    "method": "Real application/bridge/worker code with controlled browser APIs; labelled synthetic browser viewport QA.",
+    "behavior": [
+      "explicit Edge unsupported notice and original-site link",
+      "automatic unsplit and partner removal for Commons/Bing, embeddable sources and reading mode",
+      "per-tab serialized creation and cleanup",
+      "only helper-owned partners are closed",
+      "manual browser split changes synchronize layout",
+      "catalogue toggle and 190–420 px drag/keyboard resizing",
+      "temporary split collapse and normal-layout restoration"
+    ],
+    "browser_layout": {
+      "viewport_widths": [
+        1363,
+        960,
+        720,
+        480
+      ],
+      "observed_content_and_scroll_width": [
+        [
+          1363,
+          1363
+        ],
+        [
+          960,
+          960
+        ],
+        [
+          705,
+          705
+        ],
+        [
+          465,
+          465
+        ]
+      ],
+      "overlay_height_at_720": 686.921875,
+      "dragged_width": 326,
+      "width_restored": 326,
+      "horizontal_overflow": false,
+      "native_split_state_simulated": true,
+      "languages_checked": [
+        "en",
+        "zh-Hans"
+      ]
+    }
+  },
+  "release_verification": {
+    "archive_integrity": true,
+    "first_start": {
+      "passed": true,
+      "version": "0.8.0",
+      "records": 18379,
+      "audit_decisions": 699,
+      "checks": [
+        "fresh workspace initialization",
+        "clean catalogue and JDB exclusion",
+        "default settings and no saved keys",
+        "English scientific labels preserve raw metadata",
+        "local pinyin and random exclusion",
+        "expanded/responsive view persistence",
+        "view excludes unknown secret fields",
+        "unmanaged shutdown unavailable",
+        "settings roundtrip",
+        "all new static assets served",
+        "application lifespan shutdown"
+      ]
+    },
+    "managed_real_http": {
+      "passed": true,
+      "entrypoint": "launch.py --managed --no-browser",
+      "real_local_http": true,
+      "instance_matched": true,
+      "wrong_key_status": 403,
+      "pause_resume_same_instance": true,
+      "pre_pause_sse_before_content_gate": true,
+      "paused_notification_dismissal": true,
+      "resume_requires_manual_retest": true,
+      "manual_retest_started": true,
+      "paused_content_status": 503,
+      "shutdown_status": 200,
+      "exit_code": 0,
+      "external_health_probes": "disabled for isolated smoke"
+    },
+    "native_windows_tested": false,
+    "hash_note": "Final archive hashes are checked externally to avoid a self-referential checksum."
+  },
+  "incremental_upgrade": {
+    "passed": true,
+    "cases": [
+      {
+        "case": "v06-chain-to-review4",
+        "passed": true,
+        "source_installation": "Spice_Atlas_Local_v0.6.zip",
+        "folder_name_retained": true,
+        "protected_files_unchanged_before_first_start": 14,
+        "dry_run_read_only": true,
+        "steps": [
+          "v0.6.0-to-v0.7.0",
+          "v0.7.0-to-v0.8.0"
+        ],
+        "backup_present": true,
+        "setup": {
+          "active": "d5f8120fe9a1416d87f072cc0ca8adc7",
+          "versions": 2
+        },
+        "new_app_started": true,
+        "favorites": 1,
+        "history_visits": 2,
+        "workspaces": 2,
+        "ui_language": "zh-Hant",
+        "reader_size": 23,
+        "cache_packet_retained": true,
+        "media_retained": true,
+        "helper_version": "0.8.2"
+      },
+      {
+        "case": "v07-to-review4",
+        "passed": true,
+        "source_installation": "Spice_Atlas_Local_v0.7.zip",
+        "folder_name_retained": true,
+        "protected_files_unchanged_before_first_start": 14,
+        "dry_run_read_only": true,
+        "steps": [
+          "v0.7.0-to-v0.8.0"
+        ],
+        "backup_present": true,
+        "setup": {
+          "active": "26f139c2eafa4cf88ad011fff98ef95e",
+          "versions": 2
+        },
+        "new_app_started": true,
+        "favorites": 1,
+        "history_visits": 2,
+        "workspaces": 2,
+        "ui_language": "zh-Hant",
+        "reader_size": 23,
+        "cache_packet_retained": true,
+        "media_retained": true,
+        "helper_version": "0.8.2"
+      },
+      {
+        "case": "v08-review2-to-review4",
+        "passed": true,
+        "source_installation": "Spice_Atlas_Local_v0.8.zip",
+        "folder_name_retained": true,
+        "protected_files_unchanged_before_first_start": 14,
+        "dry_run_read_only": true,
+        "steps": [
+          "v0.7.0-to-v0.8.0"
+        ],
+        "backup_present": true,
+        "setup": {
+          "active": "7e247e4ec7c647f7958d9a5ad72bd4ce",
+          "versions": 2
+        },
+        "new_app_started": true,
+        "favorites": 1,
+        "history_visits": 2,
+        "workspaces": 2,
+        "ui_language": "zh-Hant",
+        "reader_size": 23,
+        "cache_packet_retained": true,
+        "media_retained": true,
+        "helper_version": "0.8.2"
+      },
+      {
+        "case": "v08-review3-to-review4",
+        "passed": true,
+        "source_installation": "Spice_Atlas_Local_v0.8_review3.zip",
+        "folder_name_retained": true,
+        "protected_files_unchanged_before_first_start": 14,
+        "dry_run_read_only": true,
+        "steps": [
+          "v0.7.0-to-v0.8.0"
+        ],
+        "backup_present": true,
+        "setup": {
+          "active": "5e9e7040e6414501af7e3b6ac032f1a7",
+          "versions": 2
+        },
+        "new_app_started": true,
+        "favorites": 1,
+        "history_visits": 2,
+        "workspaces": 2,
+        "ui_language": "zh-Hant",
+        "reader_size": 23,
+        "cache_packet_retained": true,
+        "media_retained": true,
+        "helper_version": "0.8.2"
+      }
+    ],
+    "native_windows_tested": false,
+    "native_extension_installation_tested": false,
+    "external_health_probes": "disabled"
+  }
+}

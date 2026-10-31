@@ -45,10 +45,10 @@ async function readWebResult(url,refresh=false){
  catch(error){if(epoch===state.articleEpoch)showNotice('articleWarning',errorMessage(error));}
  finally{if(epoch===state.articleEpoch)$('articleBody').removeAttribute('aria-busy');}
 }
-function homeView(){return {entry:'basil',form:null,source:'auto',wikiLocale:null,sourceReadUrl:null,imageProvider:'commons',imageProfile:'auto',query:'',scope:'all',node:null,path:[],offset:0,treeOffset:0,group:'all',collection:'catalogue',readerMode:'focus',textMode:'original',typeStyle:'botanical',nameChineseStyle:state.prefs.name_chinese_style||'botanical',nameWesternStyle:state.prefs.name_western_style||'book',frameOpen:false,frameExpanded:false,frameMode:'responsive',anchor:'',mainScroll:0,catalogScroll:0,treeScroll:0,entryScroll:0,windowScroll:0};}
+function homeView(){return {entry:'basil',form:null,source:'auto',wikiLocale:null,sourceReadUrl:null,imageProvider:'commons',imageProfile:'auto',query:'',readingQuery:'',nameFonts:{},exploreReading:null,scope:'all',node:null,path:[],offset:0,treeOffset:0,group:'all',collection:'catalogue',readerMode:state.immersive?'full':'focus',textMode:'original',typeStyle:'botanical',nameChineseStyle:state.prefs.name_chinese_style||'botanical',nameWesternStyle:state.prefs.name_western_style||'book',frameOpen:false,frameExpanded:false,frameMode:'responsive',anchor:'',mainScroll:0,catalogScroll:0,treeScroll:0,entryScroll:0,windowScroll:0};}
 async function returnHome(){
- state.nameChineseStyle=null;state.nameWesternStyle=null;
- state.anchor='';state.anchorPinned=false;state.scope='all';state.collection='catalogue';state.node=null;state.path=[];state.offset=0;catalogNav.treeOffset=0;state.group='all';state.mode='focus';state.frameMode='responsive';state.wikiLocale=null;
+ state.nameChineseStyle=null;state.nameWesternStyle=null;state.nameFonts={};state.exploreReading=null;$('readingSearch').value='';$('readingSearchResults').hidden=true;
+ state.anchor='';state.anchorPinned=false;state.scope='all';state.collection='catalogue';state.node=null;state.path=[];state.offset=0;catalogNav.treeOffset=0;state.group='all';state.mode=state.immersive?'full':'focus';state.frameMode='responsive';state.wikiLocale=null;
  $('search').value='';$('catalogScope').value='all';$('collectionMode').value='catalogue';$('typeStyle').value='botanical';updateGroups();closeFrame();$('main').scrollTop=0;window.scrollTo?.(0,0);
  await Promise.all([loadTree(),loadCatalogue(),loadEntry('basil')]);
 }

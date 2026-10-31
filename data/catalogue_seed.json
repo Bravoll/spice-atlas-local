@@ -1,8 +1,8 @@
 {
-  "schema": 1,
-  "uncompressed_bytes": 61231104,
-  "sha256": "89990dd2091ad5aace306ec93e29ed92a9606dcca5d98d6234444c68c56524de",
-  "catalogue_records": 18379,
-  "audit_records": 699,
-  "source_version": "0.4.0"
+  "format": 1,
+  "source_version": "0.8.0",
+  "naming_revision": "names-20261031-v08-review2",
+  "uncompressed_bytes": 69402624,
+  "sha256": "b54dd215546b837fc5414136825e1c33c04a1b46fbf909aa4cccd04551babd35",
+  "compression": "gzip"
 }

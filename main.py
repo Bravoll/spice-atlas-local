@@ -44,7 +44,7 @@ async def lifespan(app):
     await health.stop()
     for version in workspaces.list()["versions"]:await jobs.pause_all(version["id"])
 
-app=FastAPI(title="Spice Atlas · Live Catalogue",version="0.7.0",lifespan=lifespan)
+app=FastAPI(title="Spice Atlas · Live Catalogue",version="0.8.0",lifespan=lifespan)
 reader=Reader()
 anticipation=Anticipation(reader)
 
@@ -293,7 +293,7 @@ async def diagnose():
 
 @app.get("/api/status")
 def status():
-    return {"version":"0.7.0",**runtime_identity(ROOT),**runtime.public(),"active_version":workspaces.active_id,"cache":reader.store.stats(),"catalogue":catalogue.stats(),
+    return {"version":"0.8.0",**runtime_identity(ROOT),**runtime.public(),"active_version":workspaces.active_id,"cache":reader.store.stats(),"catalogue":catalogue.stats(),
             "providers":[{"id":"wikimedia","name":"Wikipedia / Commons","mode":"live_api"},
                          {"id":"wikidata","name":"Wikidata names / aliases","mode":"metadata_api"},
                          {"id":"gbif","name":"GBIF botanical reference","mode":"taxonomy_api"},
@@ -526,14 +526,22 @@ def history_entry(entry_id:str):entry_for(entry_id);activity.visit(entry_id);ret
 @app.get('/api/logs')
 def logs(before:int|None=None,limit:int=100,manager:bool=False):return {'rows':workspaces.manager_logs(before,limit) if manager else activity.events(before,limit)}
 
-VIEW_KEYS={'entry','form','source','imageProvider','imageProfile','query','scope','node','path','offset','group','collection','mainScroll','catalogScroll','windowScroll','readerMode','textMode','typeStyle','nameChineseStyle','nameWesternStyle','frameOpen','frameFit','frameMode','frameExpanded','anchor','treeOffset','treeLimit','entryLimit','treeScroll','entryScroll','wikiLocale','sourceReadUrl'}
+VIEW_KEYS={'immersive','exploreReading','readingQuery','nameFonts','entry','form','source','imageProvider','imageProfile','query','scope','node','path','offset','group','collection','mainScroll','catalogScroll','windowScroll','readerMode','textMode','typeStyle','nameChineseStyle','nameWesternStyle','frameOpen','frameFit','frameMode','frameExpanded','anchor','treeOffset','treeLimit','entryLimit','treeScroll','entryScroll','wikiLocale','sourceReadUrl'}
 @app.get('/api/view-state')
 def view_state():
     path=workspaces.directory()/'view_state.json';return json.loads(path.read_text('utf-8')) if path.exists() else {}
 
 @app.post('/api/view-state')
 def save_view(value:dict=Body(...)):
-    safe={k:v for k,v in value.items() if k in VIEW_KEYS};text=json.dumps(safe,ensure_ascii=False)
+    safe={k:v for k,v in value.items() if k in VIEW_KEYS}
+    from atlas.typography import name_fonts
+    if 'nameFonts' in safe:safe['nameFonts']=name_fonts(safe['nameFonts'])
+    if 'immersive' in safe and not isinstance(safe['immersive'],bool):raise ValueError('Invalid reading mode')
+    if 'readingQuery' in safe and (not isinstance(safe['readingQuery'],str) or len(safe['readingQuery'])>120):raise ValueError('Invalid reading query')
+    if safe.get('exploreReading') is not None:
+        if not isinstance(safe['exploreReading'],dict):raise ValueError('Invalid exploration state')
+        safe['exploreReading']={k:v for k,v in safe['exploreReading'].items() if k in {'entry','source','sourceReadUrl','readerMode','textMode','form','imageProvider','imageProfile','mainScroll','windowScroll','frameOpen','frameExpanded','frameMode'}}
+    text=json.dumps(safe,ensure_ascii=False)
     if len(text)>20000:raise HTTPException(400,'View state too large')
     path=workspaces.directory()/'view_state.json';tmp=path.with_suffix('.tmp');tmp.write_text(text,'utf-8');tmp.replace(path);return {'ok':True}
 

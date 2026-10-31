@@ -95,3 +95,7 @@ README 使用项目所有者提供的截图，保留原有署名。截图中的 
 工作版本可通过重复访问或闲置预热保留已取正文、云译文及图片元数据；保留原来源／版本、获取时间、链接和提供的许可。预测载荷只在内存，运行缓存及操作统计不进入发行包。长期保存和 API 获取不额外授予复用权利。
 
 第三次修订的公开检索阅读器展示有标签的结果元数据与链接，审阅站点 HTML 清理后显示。公开图像结果保留原文件页，不把可获取等同于免费许可。原站 frame 限制与验证保留，不移除安全头或代理活动原站。Wikidata 名称表保留 CC0 来源说明，GBIF v2／v1 仍遵循来源数据集条款。
+
+## v0.8 名称核对来源
+
+应用代码仍为 MIT。**中科院《中国生物物种名录 2023》v1.1 来源数据采用 CC BY-NC 4.0**，需署名并受非商业使用限制；引用为 The Biodiversity Committee of Chinese Academy of Sciences (2024)，DOI [10.15468/ae6ush](https://doi.org/10.15468/ae6ush)。**TaiCOL v1.13 采用 CC BY 4.0**，Shao K (2024), TaiBIF，DOI [10.15468/auw1kd](https://doi.org/10.15468/auw1kd)。Wikidata 结构化数据采用 CC0；GBIF Backbone Taxonomy 采用 CC BY 4.0，汇入来源仍遵守原条款。[名称核对档案](data/research_curation/name_audit_v08/README.md)保留各名称的署名、原记录号、版本及下载哈希。不能将这些数据重新宣称为 MIT 代码。

@@ -8,7 +8,7 @@ SpiceAtlas brings a searchable local catalogue, source-linked encyclopedia readi
 
 ![English main interface showing Basil, its nameplates and source-linked reading](docs/screenshots/main-en-basil.png)
 
-*English example: Basil. Screenshots supplied by the project owner retain source credits; they do not change the default startup ingredient. [Capture details and attribution](docs/screenshots/README.md).*
+*v0.7 English example: Basil. Screenshots supplied by the project owner retain source credits; they do not change the default startup ingredient. [Capture details and attribution](docs/screenshots/README.md).*
 
 ## What the current system does
 
@@ -19,15 +19,17 @@ SpiceAtlas brings a searchable local catalogue, source-linked encyclopedia readi
 | Ingredient images | Automatic Commons lookup, separate material/packaging filters, thumbnail/source/licence cards and original search links |
 | Languages & translation | Auto / English / Simplified / Traditional interface modes; configurable LM Studio-compatible, Google Cloud and Azure translation for up to eight focus paragraphs |
 | Personal collections | Named, editable workspaces with separate catalogues, settings, caches and logs; copy, switch, reorder, recover deleted workspaces |
-| Reading experience | Independent article typography, light/dark themes, four motion levels, operation Back/Forward, random exploration and configurable paging shortcuts |
+| Reading experience | Immersive Wiki/Commons reading, language-ordered names, independent font families, light/dark themes, four motion levels, operation Back/Forward, random exploration and configurable paging shortcuts |
 | Desktop operation | Windows background launcher, progress/details panel, tray controls and pause/resume notifications; console startup on macOS/Linux |
 | Incremental upgrades | Manifest checks, original-folder updates, program backups and failure rollback while retaining personal data and the dependency environment |
 
 The baseline contains **18,379 records**: **92 culinary candidates** and **18,287 botanical references**. These are not 18,379 verified edible spices. Thirteen examples have curated presentation fields; uncertain culinary identity remains explicit. The cleaning audit retains 699 exclusion, review and exact-identity merge decisions. Catalogue metadata was imported on 27 October 2026, with cleaning evidence obtained on 28 October; live sources have their own fetch times.
 
+The v0.8 second review audits every bundled record by scientific identity, adds **1,046 sourced Chinese names**, and supplies **2,581 Chinese names / 2,906 English common names**. **15,798 Chinese common names remain unconfirmed** and are explicitly labelled; scientific names remain available. It also adds 148 checklist-based family/genus placements and Chinese labels for 448 of 959 category nodes. [Audit, full CSV and limitations](data/research_curation/name_audit_v08/README.md). CAS-derived naming data uses **CC BY-NC 4.0**, separately from the application’s MIT code; TaiCOL uses CC BY 4.0.
+
 ## A closer look
 
-The full-width reader keeps its chapter outline above the article. Chinese and Western nameplates sit beside pronunciation near the top; each workspace can save its preferred typography. The **Aa** edge tab changes article size and spacing without scaling the whole interface. System reduced-motion preferences take priority over the four motion levels.
+The exploratory reader keeps its chapter outline above the article. **Reading mode** hides the catalogue and source switches, centres the full Wikipedia body and available Commons images, and moves chapter navigation into a slim, expandable rail. Nameplates follow the interface language: English/Chinese, or Chinese/English; labels name the actual language. Each workspace can save title and article font families, with original family names and localized aliases. The **Aa** edge tab changes article size and spacing without scaling the whole interface. System reduced-motion preferences take priority over the four motion levels.
 
 “Versions” in the application are editable **collection workspaces**, separate from application release numbers. Each keeps its own catalogue, settings, favourites, history, resource cache and operation counts. The manager registry and program-upgrade history sit outside these workspaces. Retained online resources keep their original source and fetch time; Refresh requests a newer copy.
 
@@ -50,7 +52,7 @@ uv run --no-sync python launch.py
 
 Without uv, create a Python virtual environment, install `requirements.txt`, and run `python launch.py`. The default address is <http://127.0.0.1:8765>; an occupied port may cause the launcher to select a nearby free one. Open the address it reports. Opening `index.html` directly cannot use the backend.
 
-**Already using v0.6 or the previous v0.7 candidate?** Stop the old service, extract the new patch/full package elsewhere, run **its** `Update_Atlas.cmd`, and select the original installation directory. Keep the original path and `.venv`; do not replace your `data/` directory with a fresh baseline. [In-place upgrade guide](docs/UPGRADING.en.md). The updater accepts complete migration chains, but this release includes only the real 0.6→0.7 step and supported 0.7 revisions; future versions and automatic GitHub downloading are not implemented.
+**Already using v0.7?** Stop the old service, extract the **v0.7→v0.8** patch elsewhere, run **its** `Update_Atlas.cmd`, and select the original installation directory. A full v0.8 package also includes the actual **0.6→0.7→0.8** chain for older installations. Keep the path and `.venv`; do not replace your `data/` directory with a fresh baseline. [In-place upgrade guide](docs/UPGRADING.en.md). Automatic GitHub downloading is not implemented.
 
 ## How it fits together
 
@@ -90,16 +92,19 @@ npm ci
 npm run test:ui
 ```
 
-Verification records **215 backend tests**, **127 UI checks**, responsive Chrome observations and isolated actual-ZIP upgrades from v0.6 / the previous v0.7 candidate. See `data/verification_v07.json`. `npm run dev` is a labelled synthetic QA preview, not the Python service. Windows native UI, default-browser association, personal translation credentials, audible speech and 120 Hz rendering remain target-device checks.
+The v0.8 release passes **227 backend tests** and **190 UI checks**, Chrome synthetic-layout observations and isolated actual-ZIP upgrades. See `data/verification_v08.json`; earlier v0.7 evidence remains separate. `npm run dev` is a labelled synthetic QA preview, not the Python service. Actual font installation/glyph coverage, local-font permission prompts, Windows native UI, default-browser association, personal translation credentials, audible speech and 120 Hz rendering remain target-device checks.
 
-## What's new in v0.7
+## What's new in v0.8 · 2026-11-01
 
-- Added bounded catalogue regions, stable paging controls, custom shortcuts and settings-only catalogue management.
-- Added persistent notification cards, pre-pause/resume notices, a 2-second diagnostic publication deadline and periodic rechecks.
-- Added parallel “Other sources” cards, reviewed adapters, Wiki language resolution and reading/translation concurrency fixes.
-- Added per-workspace operation statistics, idle warming, retained resource packets and memory-only predictions.
-- Refined theme/text transitions, popup entry/exit, full-width reading, top nameplates and aligned Wiki/language controls.
-- Added in-place updates and small patches, image-query labels, public image metadata parsing and the optional native split helper.
-- Published bilingual project documentation, attributed interface screenshots and a source-code MIT licence. Startup defaults remain unchanged.
+- Focused reading with immediate local identity, staged full Wiki content, optional Commons image groups and a compact chapter rail; empty image forms are omitted.
+- Actual-language name labels, automatic left/right order and a general 31-family font picker with localized aliases. Optional local font enumeration is initiated only by the user; its inventory stays in browser memory. Unsupported browsers retain the catalogue and manual family entry.
+- Saved reading states and reversible return to exploratory sources, filters, image window and scroll; late responses cannot replace newer content.
+- Real 0.7→0.8 patch and chained 0.6→0.7→0.8 upgrade support with the same third-party requirements.
+- Fixed the optional developer preview entry point. Public README screenshots above remain owner-supplied v0.7 views; no startup default has changed.
+- Stable chapter hit areas and explicit selection; exiting reading also restores whole-page scroll on narrow layouts.
+- Exact-identity name audits, source evidence, per-workspace backup and conservative repairs that preserve custom names. Missing common names stay explicit.
 
-[Complete v0.7 changes and earlier releases →](CHANGELOG.md)
+[Complete changes and earlier releases →](CHANGELOG.md)
+
+
+- Split helper 0.8.2 makes Edge support explicit and cleans up its source pane on Commons/Bing. Catalogue toggle/resize and narrow layouts are included. Adjust 2:1 manually with the browser divider. Reload the updated helper and refresh Atlas.

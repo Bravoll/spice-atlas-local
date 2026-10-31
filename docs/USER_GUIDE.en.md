@@ -28,13 +28,29 @@ The progress percentage represents completed stages, not a download measurement:
 
 Use the local HTTP address. Opening HTML directly cannot connect to the Python API. Node.js is optional and used only for developer checks and the synthetic preview.
 
-**Existing installation:** use the small v0.6→v0.7 update bundle, or the full new release's `Update_Atlas.cmd`. Select your existing folder after choosing **Stop service & exit**. The manifest-based updater retains its path, `.venv`, all named workspaces, history, settings and caches, with backups and whole-chain rollback. It does not replace your database with the release baseline. See [Upgrade in place](UPGRADING.en.md). Fresh installations still use `run.cmd`.
+**Existing installation:** use the small v0.7→v0.8 update bundle (v0.6 needs the full v0.8 package), or the full new release's `Update_Atlas.cmd`. Select your existing folder after choosing **Stop service & exit**. The manifest-based updater retains its path, `.venv`, all named workspaces, history, settings and caches, with backups and whole-chain rollback. It does not replace your database with the release baseline. See [Upgrade in place](UPGRADING.en.md). Fresh installations still use `run.cmd`.
 
 The Git checkout stores the baseline as `data/catalogue.sqlite3.gz`. First launch verifies its size and SHA-256 before restoring SQLite. Existing databases are preserved. Portable ZIP releases contain the plain baseline and require no manual decompression.
 
-Two compact Chinese/Western nameplates now occupy the hero. Temporary typography choices are independent; Settings saves each workspace's defaults. The reader uses the full content width with its chapter outline above it. Wiki and its language selector sit at the upper right of the knowledge heading, with the short source note next to the title.
+Two language-ordered nameplates occupy the hero. Font choices are independent; Settings saves each workspace's defaults. The reader uses the full content width with its chapter outline above it. Wiki and its language selector sit at the upper right of the knowledge heading, with the short source note next to the title.
 
 Image results show the actual search terms. Readable public HTML metadata can form local thumbnail/title/source cards. Google/Baidu verification or frame restrictions remain possible. An [optional native split helper](../browser_helper/README.md) can open the original site beside Atlas when the actual browser API supports it; it is not installed automatically. The ordinary new-tab links remain available.
+
+**Updating the split helper:** This release includes helper 0.8.2. Reload its card in extension management, then refresh Atlas; refreshing the page alone does not reload the extension. Restricted sources automatically attempt a split, and the split button reconnects and retries. The source area shows the version, connection and API status. Use the browser where it is installed; embedded app windows do not share another browser’s extensions.
+
+## Immersive reading and fonts
+
+Select an entry and choose **Reading mode**. The page keeps Home, local header search, theme and Aa while hiding the catalogue and provider/form switches. Local names, scientific identity, pinyin and pronunciation appear immediately; the complete Wiki body is shown once ready. Commons groups appear only when pictures are returned, with file links, authors and licences. Up to eight forms are queried with two concurrent workers, at most three pictures per group and a 40-second image-round limit.
+
+The slim chapter rail expands on hover, focus or tap. A completely visible section wins first, then visible height; sufficiently visible child sections take priority, with a small stability margin. Translation remains limited to focus paragraphs, so translated/bilingual views hide the full-body chapter marks and retain their scope notice. Wiki failures reach a retry state rather than loading forever.
+
+**Exit reading** restores the previous source, forms, image window and position. If you selected another entry, its exploratory sources start from defaults. Back/Forward includes mode, names and fonts. Home clears temporary choices without clearing favourites, history, settings or statistics. Reading mode does not warm unrelated exploratory providers.
+
+English UI puts English on the left and Chinese on the right; both Chinese variants reverse that order. Labels name the actual language. Future language pairs and `localized_names` fields are prepared, but no additional UI language is enabled in v0.8. Common English names versus Latin scientific names are independent of their font family.
+
+Exploratory title selectors are temporary choices; Settings saves Chinese (for the current variant) and English defaults per workspace. Aa separately previews and saves article fonts. The catalogue contains 31 families, showing their original name plus a recorded localized alias when available. These aliases are not claims of official trademark translations or of installed glyph coverage.
+
+When supported, **Read local fonts** in Aa asks the browser for permission only after you click. The resulting family inventory stays in page memory; it is not uploaded with settings. If the API is unavailable or permission is denied, use the catalogue or enter a system family name manually. A listed font may be missing on your device, in which case the browser falls back. No font is installed or downloaded by this feature.
 
 ## Explore the collection
 
@@ -193,6 +209,16 @@ Drag handles or arrows persist ordering. Copying/switching pauses imports and re
 - [Content, audio and dependency notices](../CONTENT_LICENSES.md)
 - [Historical design and development notes](history/)
 
-Backend regression: `uv run python -m unittest discover -s tests -q`. Optional UI checks: `npm ci && npm run test:ui`. `npm run dev` starts a clearly labelled **synthetic QA preview**, not the Python application. Current evidence: `data/verification_v07.json` (v0.7 review revision 5). Earlier evidence and live observations retain their original versioned filenames.
+Backend regression: `uv run python -m unittest discover -s tests -q`. Optional UI checks: `npm ci && npm run test:ui`. `npm run dev` starts a clearly labelled **synthetic QA preview**, not the Python application. Current evidence: `data/verification_v08.json` (v0.8 review candidate). Earlier evidence and live observations retain their original versioned filenames.
 
 Native Windows UI, personal LM Studio/Google/Azure credentials and target-device audio were not exercised in the Linux test environment. Installed voice packs, audible British output, 120 Hz performance and third-party framing must be checked on the target device. Full-article translation, verified culinary facts for every plant, video production, GitHub automatic downloading remain future work. Original application source is now licensed under [MIT](../LICENSE). Third-party content keeps its own applicable terms.
+
+## Second-review naming and chapter selection
+
+Chapter hit positions stay fixed when labels expand; clicked sections remain selected until manual scrolling. Expand **Name & classification evidence** beneath a title to inspect its sources. Missing common names are labelled as scientific-name fallbacks. This revision adds 1,046 Chinese names; 15,798 remain unconfirmed. The [second-review report](V08_REVIEW2.zh-CN.md) and full CSV describe coverage and the conservative workspace repair.
+
+## Catalogue and browser split view
+
+Use Catalogue in the header to show/hide the left pane. Drag its edge on desktop (190–420 px), use arrow keys for small changes, and double-click/Home to reset. Preferences stay in this browser. Splits collapse it temporarily; narrow screens open it as an overlay, dismissible with Escape or the backdrop.
+
+Google/Baidu reuse the helper source partner. Commons/Bing, embeddable sources and reading mode close that partner. Unrelated user splits are preserved. Edge without an automatic API cannot be invoked by installing the helper; Atlas states this and offers a source-tab link. Use the browser toolbar for manual splits. Current APIs cannot set 2:1; drag the browser divider.

@@ -1,11 +1,11 @@
 {
   "name": "spice-atlas-local",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "private": true,
   "description": "Optional synthetic UI preview and browser QA; the application runs with Python.",
   "scripts": {
-    "dev": "node .readme-capture/serve.mjs",
-    "test:ui": "node tests/ui_acceptance.cjs && node tests/experience_acceptance.cjs && node tests/interactions_acceptance.cjs && node tests/observatory_acceptance.cjs && node tests/revision_acceptance.cjs && node tests/reading_review3_acceptance.cjs && node tests/reading_concurrency_acceptance.cjs && node tests/layout_review5_acceptance.cjs && node tests/split_helper_acceptance.cjs"
+    "dev": "node tests/preview_fixture.mjs --port 4173",
+    "test:ui": "node tests/ui_acceptance.cjs && node tests/experience_acceptance.cjs && node tests/interactions_acceptance.cjs && node tests/observatory_acceptance.cjs && node tests/revision_acceptance.cjs && node tests/reading_review3_acceptance.cjs && node tests/reading_concurrency_acceptance.cjs && node tests/layout_review5_acceptance.cjs && node tests/split_helper_acceptance.cjs && node tests/reading_v08_acceptance.cjs && node tests/reading_v08_concurrency.cjs && node tests/naming_review2_acceptance.cjs && node tests/browser_helper_bridge_acceptance.cjs && node tests/split_lifecycle_acceptance.cjs"
   },
   "devDependencies": {
     "linkedom": "0.18.12"

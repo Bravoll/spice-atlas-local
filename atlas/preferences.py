@@ -12,10 +12,10 @@ DEFAULTS={
  'translation_provider':'local','excluded_languages':[],'lm_enabled':False,
  'lm_base_url':'http://127.0.0.1:1234/v1','lm_model':'','lm_api_key':'',
  'google_translate_key':'','azure_translate_key':'','azure_region':'',
- 'google_api_key':'','google_cse_id':'','user_agent':'SpiceAtlas/0.7 (local botanical reference reader)',
+ 'google_api_key':'','google_cse_id':'','user_agent':'SpiceAtlas/0.8 (local botanical reference reader)',
  'proxy_url':'','trust_env':True,'timeout_seconds':25,'live_first':True,'image_mode':'direct',
  'browser_images':True,'appearance':'light','history_order':'recent',
- 'reader_font_size':17,'reader_line_height':1.85,'reader_font':'serif','animation_level':2,
+ 'reader_font_family':'','name_fonts':{},'reader_font_size':17,'reader_line_height':1.85,'reader_font':'serif','animation_level':2,
  'startup_mode':'resume','random_scope':'culinary',
  'name_chinese_style':'botanical','name_western_style':'book',
  'shortcuts':{'tree_previous':'[','tree_next':']','entry_previous':',','entry_next':'.'},
@@ -35,7 +35,7 @@ class Preferences:
  @path.deleter
  def path(self):self._path=None
  def values(self):
-  data={**DEFAULTS,'excluded_languages':[]};saved={}
+  data={**DEFAULTS,'excluded_languages':[],'name_fonts':{}};saved={}
   if self.path.is_file():
    saved=json.loads(self.path.read_text('utf-8'))
    for key,value in saved.items():
@@ -64,6 +64,10 @@ class Preferences:
     if value not in (TRANSLATION_LANGUAGES if key=='translation_language' else LANGUAGES):raise ValueError('Unsupported language')
    elif key in ('auto_translate','trust_env','live_first','browser_images','lm_enabled','other_search_enabled','prefetch_enabled'):
     if not isinstance(value,bool):raise ValueError(key+' must be boolean')
+   elif key in {'name_fonts','reader_font_family'}:
+    from .typography import name_fonts,valid_font
+    if key=='name_fonts':value=name_fonts(value)
+    elif not valid_font(value):raise ValueError('Invalid reader font')
    elif key=='shortcuts':
     if not isinstance(value,dict) or set(value)!=set(DEFAULTS['shortcuts']):raise ValueError('Provide all four catalogue shortcuts')
     value={k:str(v).lower() for k,v in value.items()}

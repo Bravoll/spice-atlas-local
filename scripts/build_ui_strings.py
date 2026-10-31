@@ -6,6 +6,12 @@ from bs4 import BeautifulSoup
 from atlas.localization import to_hant
 root=Path(__file__).resolve().parents[1]
 text='''sourceCutoff	源目录截止	Source catalogue cutoff
+nameAuditMissing	尚未确认可靠的{languages}常用名，暂以学名展示。	No reliable {languages} common name confirmed; the scientific name is shown.
+nameEvidenceTitle	名称与分类出处	Name & classification evidence
+taxonomyEvidence	分类	Classification
+nameCheckedAt	名称核对时间	Names checked
+nameAuditCoverage	内置名称核对：{zh} 个中文名；{missing} 个中文名未确认	Bundled name audit: {zh} Chinese names; {missing} Chinese names unconfirmed
+scientificCategoryOnly	未确认中文分类名，显示正式学名。	Chinese classification label unconfirmed; the scientific name is shown.
 cleanedAt	清洗时间	Cleaned at
 lastSync	最近同步	Last synchronized
 imageProfile	图片形态筛选	Image form filter
@@ -60,6 +66,30 @@ aboutIntro	用于逐步探索植物、调味原料、文化与来源的本地资
 sourcePolicy	语言与来源排序	Language & source order
 serviceHelp	连接检测与临时禁用	Connection checks & temporary filtering
 imageVocabulary	图片关键词库	Image search vocabulary
+enterReadingMode	阅读模式	Reading mode
+exitReadingMode	退出阅读	Exit reading
+readingLoading	正在读取百科与图片…	Reading encyclopedia and image references…
+readingRetry	百科暂未读取成功 · 点击重试	Encyclopedia unavailable · Retry
+fontDefault	跟随排印默认	Typography default
+fontFamilyLabel	字体名称	Font family
+nameContentLabel	名称内容	Name content
+fontCatalogueHelp	显示字体原名与已登记的本地名称。未安装的字体会回退；字体列表不保证字形覆盖。	Original names and recorded local aliases. Uninstalled fonts fall back; listed names do not guarantee glyph coverage.
+readLocalFonts	读取本机字体（可选）	Read local fonts (optional)
+localFontsPrivacy	仅在点击并经浏览器授权后读取。本机字体列表留在浏览器，不上传后台。	Read only after a click and browser permission. The font list stays in this browser.
+localFontsUnavailable	此浏览器不能列出本机字体；仍可选登记字体或手动填写原名。	This browser cannot list local fonts. Use the catalogue or enter a family name.
+localFontsReading	等待浏览器字体授权…	Waiting for browser font permission…
+localFontsLoaded	已读取 {count} 个额外字体系列；仅保存在本次浏览器会话。	Loaded {count} additional font families for this browser session.
+localFontsDenied	未获得本机字体权限。登记字体与手动输入仍可使用。	Local font permission was not granted. Catalogue and manual entry remain available.
+customFontFamily	手动输入字体原名	Enter a font family name
+applyCustomFont	预览此字体	Preview this font
+fontInvalid	请输入有效的字体系列原名。	Enter a valid font family name.
+defaultChineseNameFont	中文名称默认字体	Default Chinese name font
+defaultWesternNameFont	英文名称默认字体	Default English name font
+commonName	常用名称	Common name
+scientificNameChoice	拉丁学名	Latin scientific name
+nameMissing	尚未收录{language}名称，显示已有学名。	No {language} name recorded; showing the scientific name.
+chapters	本页章节	Article chapters
+noLocalMatches	没有匹配的本地条目。	No matching local entries.
 licenseHelp	原创应用由 Bravoll 维护，源码采用 MIT。百科文字、照片与音频保留原来源、作者和各自许可；API 引用不会免除要求。植物参考记录不代表可食用。本版支持本机增量升级，GitHub 自动下载后续再加入。	Original application by Bravoll; source code uses MIT. Encyclopedia text, photos and audio retain their sources, authors and own licences; API access does not waive requirements. Botanical references do not establish edibility. Local incremental upgrades are included; automatic GitHub downloads are deferred.
 rename	重命名	Rename
 switchVersion	切换	Switch
@@ -214,6 +244,36 @@ text+='readWikipedia\t读取所选语言的维基条目\tRead Wikipedia in the s
 text+='originalSearchView\t原站检索视窗（内容由来源网站显示）\tOriginal search view (rendered by the provider)\n'
 text+="\nstyleNote\t现代排印意象，不作历史起源认定\tModern typography study, not a historical attribution\nchineseNameLabel\t中文名称\tChinese name\nwesternNameLabel\t西文名称\tWestern name\ndefaultChineseName\t默认中文展签\tDefault Chinese nameplate\ndefaultWesternName\t默认西文展签\tDefault Western nameplate\nimageQueryLabel\t检索关键词\tSearch terms\nbrowserOther\t当前浏览器\tCurrent browser\nopenNativeSplit\t浏览器分屏打开\tOpen in browser split view\nopenSearchTab\t新标签页打开原站\tOpen source in a new tab\nsplitHelp\t分屏使用说明\tSplit-view help\nsplitHelperReady\t分屏助手已连接，原生接口可用\tSplit helper connected; native API available\nsplitHelperMissing\t普通网页无法直接控制浏览器分屏；可使用随包附带的可选助手\tA web page cannot control browser split views directly; an optional helper is included\nsplitFrameNote\t原站不允许内嵌。可在独立原站标签或支持的分屏中查看；图鉴只展示能公开读取的图片结果。\tThe source forbids embedding. Use an independent source tab or supported native split; Atlas displays only publicly readable image results.\nsplitVerificationNote\t来源要求原站验证；请在原站标签页或浏览器分屏中自行访问。图鉴不会自动完成验证。\tThe source requires verification. Visit it in a source tab or browser split. Atlas does not complete verification automatically.\nsplitOpened\t已在图鉴旁打开浏览器原生分屏，原站保持独立页面。\tOpened a native browser split beside Atlas. The source remains an independent page.\nsplitCouldNotOpen\t本次未能创建原生分屏，可使用新标签页入口，并在浏览器菜单中手动分屏。\tCould not create a native split. Open the source tab and use your browser's split-view menu.\nsplitHelpBody\t普通网页不能直接调用浏览器扩展的分屏 API。可选择在 Chrome／Edge 的扩展管理页加载已经安装的图鉴目录中的 browser_helper 文件夹；它只匹配本机图鉴页面，并只导航到批准的图片检索页面，不读取外站正文、不修改安全响应头。实际检测到原生分屏接口时，受限来源可自动在旁边打开；浏览器版本和策略不支持时，使用“新标签页打开原站”，再从标签菜单选择分屏。此助手不自动安装。\tWeb pages cannot call extension split-view APIs. Optionally load the release's browser_helper folder in Chrome/Edge extension management. It matches local Atlas pages and only navigates approved image-search pages. It does not read remote page content or change security headers. Supported native APIs enable automatic side-by-side opening; otherwise open a source tab and choose split view in the tab menu. The helper is not installed automatically.\n"
 text+='splitApiMissing\t分屏助手已连接，但本浏览器未提供可用的原生分屏接口\tSplit helper connected, but this browser has no available native split API\n'
+text+='''splitHelperVersion	助手 {version}	Helper {version}
+splitHelperOutdated	连接到了旧版助手。请在扩展管理页重新加载已更新的助手，再刷新图鉴。	An old helper is connected. Reload the updated helper in extension management, then refresh Atlas.
+splitOpening	正在打开浏览器分屏…	Opening browser split view…
+splitHelperDisconnected	尚未连接到分屏助手。请在扩展管理页重新加载助手，再刷新图鉴并重试。	The split helper is not connected. Reload it in extension management, refresh Atlas and retry.
+splitGestureExpired	请点击“浏览器分屏打开”继续打开当前来源。	Click “Open in browser split view” to continue opening this source.
+splitExistingUser	图鉴当前位于另一个分屏中。请先退出该分屏，再重试。	Atlas is already in another split view. Exit that split and retry.
+splitUnconfirmed	原站标签页已打开，但浏览器未确认分屏。可点击分屏按钮重试，或使用浏览器菜单分屏。	The source tab opened, but the browser did not confirm a split. Retry the split button or use the browser menu.
+splitSourceChanged	图鉴页面已变化，请重新选择图片来源后再打开分屏。	The Atlas page has changed. Select the image source again before opening a split.
+splitTabOnlyReason	原站标签页已打开，但未能建立分屏：{reason}	The source tab opened, but creating the split failed: {reason}
+splitBrowserReason	浏览器未能建立分屏：{reason}	The browser could not create a split: {reason}
+splitHelpBody	请在 Chrome／Edge 的扩展管理页加载已安装图鉴目录中的 browser_helper 文件夹。升级助手后，先在扩展管理页点击重新加载，再刷新图鉴；仅刷新网页不会更新扩展。图片来源下方会显示助手版本、连接和接口状态。受限来源返回后会自动尝试分屏；点击分屏按钮可重新连接并重试。浏览器必须实际提供原生分屏接口；内置应用窗口无法使用安装在其他浏览器中的扩展。不支持时，可打开原站新标签页，再使用浏览器菜单分屏。	Load the installed Atlas folder's browser_helper in Chrome/Edge extension management. After an upgrade, reload the extension first, then refresh Atlas; refreshing the page alone does not update the extension. The image-source area shows the helper version, connection and API status. Restricted sources automatically attempt a split; the split button reconnects and retries. The browser must expose the native split API. Embedded application windows cannot use an extension installed in a separate browser. Otherwise, open a source tab and use the browser split-view menu.
+'''
+text+='''splitEdgeCapability	助手已连接，当前 Edge 不支持助手自动分屏	Helper connected; this Edge does not support automatic splits through the helper
+splitApiCapability	助手已连接，浏览器未提供自动分屏	Helper connected; automatic split view is unavailable in this browser
+splitEdgeUnsupported	当前 Edge 未提供助手可用的自动分屏功能，安装助手也无法自动唤醒。请点击“新标签页打开原站”，或用 Edge 工具栏手动分屏。	This Edge does not expose automatic split view to the helper, even when installed. Open the source in a new tab, or use Edge's toolbar to split manually.
+splitApiMissing	当前浏览器未提供助手可用的自动分屏功能。请打开原站标签页，或使用浏览器菜单手动分屏。	This browser does not expose automatic split view to the helper. Open the source tab or use the browser menu to split manually.
+splitReconnect	检测并连接助手	Detect and connect helper
+splitClose	关闭分屏	Close split view
+splitClosed	已关闭助手打开的原站分屏，图鉴已恢复原布局。	Closed the helper's source pane and restored the Atlas layout.
+splitUnmanaged	这个分屏不属于当前助手，请在浏览器中手动退出。	This split is not owned by the current helper. Exit it using the browser controls.
+splitCloseFailed	未能收回原站分屏，请使用浏览器关闭右侧页面。	Could not close the source pane. Use the browser controls to close the right page.
+splitRatioHint	两侧比例可拖动浏览器分隔线调整。	Drag the browser divider to adjust the two panes.
+splitHelperReady	助手已连接，自动分屏可用	Helper connected; automatic split view is available
+splitHelperOutdated	请更新并重新加载分屏助手（需要 0.8.2 或更新版本），然后刷新图鉴。	Update and reload the split helper (0.8.2 or later), then refresh Atlas.
+catalogueToggle	目录	Catalogue
+catalogueShow	显示目录	Show catalogue
+catalogueHide	收起目录	Hide catalogue
+catalogueResize	目录宽度	Catalogue width
+catalogueResizeHelp	拖动调整目录宽度；方向键微调，双击或 Home 恢复默认。	Drag to resize the catalogue; use arrow keys for small changes, double-click or Home to reset.
+'''
 zh={};en={}
 for line in text.splitlines():
  if not line.strip():continue

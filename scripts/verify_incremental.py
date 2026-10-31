@@ -5,6 +5,7 @@ from pathlib import Path
 INITIALIZE=r'''
 import json
 from atlas.workspaces import workspaces
+from atlas.catalogue import catalogue
 from atlas.activity import activity
 from atlas.preferences import preferences
 from atlas.storage import Store
@@ -15,6 +16,8 @@ activity.favorite('parsley',True,note='Retained favourite');activity.visit('pars
 Store().put('upgrade-fixture',{'retained':'online packet'},ttl=100000)
 folder=workspaces.directory();(folder/'media').mkdir(exist_ok=True);(folder/'media'/'keep.jpg').write_bytes(b'local-media-marker')
 workspaces.create('Second collection','copy')
+# A user edit must survive the subsequent audited field repair.
+item=catalogue.get('gbif-5341387');item['name_zh']='My personal Hyssop label';item['aliases']=[*item.get('aliases',[]),'private naming alias'];catalogue.upsert(item)
 print(json.dumps({'active':key,'versions':len(workspaces.list()['versions'])}))
 '''
 VERIFY=r'''
@@ -29,10 +32,16 @@ from atlas.storage import Store
 from atlas.workspaces import workspaces
 with patch.object(health,'start',lambda:None):
  with TestClient(app) as client:
-  assert client.get('/api/status').json()['version']=='0.7.0'
+  assert client.get('/api/status').json()['version']=='0.8.0'
   assert client.get('/api/catalog?limit=1').status_code==200
-  assert client.get('/static/layout_v07.css').status_code==200
+  assert client.get('/static/reading_v08.css').status_code==200
+  assert client.get('/api/settings').json()['name_fonts']=={}
+  assert client.get('/api/settings').json()['reader_font_family']==''
   assert client.get('/api/settings').json()['ui_language']=='zh-Hant'
+  assert client.get('/api/entry/gbif-5341394').json()['name_zh']=='紫苏'
+  assert client.get('/api/entry/gbif-2925649').json()['name_zh']=='柚木'
+  assert client.get('/api/catalog?q=紫苏').json()['total']>0
+  hyssop=client.get('/api/entry/gbif-5341387').json();assert hyssop['name_zh']=='My personal Hyssop label' and 'private naming alias' in hyssop['aliases']
 assert preferences.values()['reader_font_size']==23
 assert activity.collection('favorites')[0]['entry_id']=='parsley'
 assert activity.collection('history')[0]['visits']==2
@@ -65,14 +74,15 @@ def case(base,source,label,parent):
     run=subprocess.run([sys.executable,str(source/'update.py'),'--target',str(target)],capture_output=True,text=True,timeout=40);assert run.returncode==0,run.stderr+run.stdout[-2000:]
     for name,value in before.items():assert hashlib.sha256((target/name).read_bytes()).hexdigest()==value,name
     assert target.name==target_name and not (target/'data/update.lock').exists()
-    state=json.loads((target/'data/install_state.json').read_text());assert state['version']=='0.7.0'
+    state=json.loads((target/'data/install_state.json').read_text());assert state['version']=='0.8.0'
     verified=child(VERIFY,target,env)
     return {'case':label,'passed':True,'source_installation':str(base.name),'folder_name_retained':True,'protected_files_unchanged_before_first_start':len(before),'dry_run_read_only':True,'steps':state['steps'],'backup_present':(target/'data/updates'/state['transaction']/'journal.json').is_file(),'setup':setup,**verified}
 def main():
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--base',type=Path,required=True);p.add_argument('--previous',type=Path,required=True);p.add_argument('--full',type=Path,required=True);p.add_argument('--patch',type=Path,required=True);p.add_argument('--report',type=Path,required=True);a=p.parse_args()
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--base',type=Path,required=True);p.add_argument('--previous',type=Path,required=True);p.add_argument('--previous-review',type=Path);p.add_argument('--full',type=Path,required=True);p.add_argument('--patch',type=Path,required=True);p.add_argument('--report',type=Path,required=True);a=p.parse_args()
     with tempfile.TemporaryDirectory(prefix='atlas-upgrade-') as td:
         parent=Path(td);full=extract(a.full,parent/'new-full');patch=extract(a.patch,parent/'new-patch')
-        cases=[case(a.base,patch,'v06-patch',parent),case(a.previous,full,'v07-candidate-full-folder',parent)]
+        cases=[case(a.base,full,'v06-through-v07-to-v08-full-chain',parent),case(a.previous,patch,'v07-to-v08-small-patch',parent)]
+        if a.previous_review:cases.append(case(a.previous_review,patch,'v08-review1-to-review2-same-version',parent))
         result={'passed':True,'cases':cases,'native_windows_tested':False,'external_health_probes':'disabled','restart_browser':'not opened in isolated tests','patch_sha256':hashlib.sha256(a.patch.read_bytes()).hexdigest(),'patch_bytes':a.patch.stat().st_size}
         a.report.write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n');print(json.dumps(result,ensure_ascii=False))
 if __name__=='__main__':main()

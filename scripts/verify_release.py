@@ -31,11 +31,15 @@ from atlas.health import health
 with patch.object(health, 'check', new_callable=AsyncMock, return_value={}):
  with TestClient(app) as client:
   status=client.get('/api/status').json()
-  assert status['version']=='0.7.0', status
+  assert status['version']=='0.8.0', status
   assert status['catalogue']['total']==18379
   assert status['app_id']=='spice-atlas-local' and not status['managed']
   assert 'control_token' not in status
   assert client.get('/api/catalog?q=JDB%20Group').json()['total']==0
+  for key,name in [('gbif-5341394','紫苏'),('gbif-2925348','赪桐'),('gbif-2925649','柚木')]:
+   item=client.get('/api/entry/'+key).json();assert item['name_zh']==name and item['name_provenance']['zh']['url']
+  assert client.get('/api/catalog?q=紫苏').json()['total']>0
+  assert status['catalogue']['metadata']['name_audit']['chinese_missing']==15798
   assert client.get('/api/catalog/audit?limit=1').json()['total']==699
   prefs=client.get('/api/settings').json()
   assert prefs['reader_font_size']==17 and prefs['animation_level']==2
@@ -60,12 +64,12 @@ with patch.object(health, 'check', new_callable=AsyncMock, return_value={}):
   assert prefs['shortcuts']=={'tree_previous':'[','tree_next':']','entry_previous':',','entry_next':'.'}
   assert prefs['cache_session_threshold']==30 and prefs['cache_promote_hits']==6
   assert client.get('/api/cache/stats').json()['history_total']==0
-  for asset in ['interactions.js','interactions.css','experience.js','experience.css','atlas-icon.svg','atlas-icon.ico','notifications.js','text_motion.js','source_board.js','observatory.css','catalogue_navigation.js','catalogue_navigation.css','remote_cache.js','wiki_reader.js','nameplates.js','browser_sources.js','layout_v07.css']:
+  for asset in ['interactions.js','interactions.css','experience.js','experience.css','atlas-icon.svg','atlas-icon.ico','notifications.js','text_motion.js','source_board.js','observatory.css','catalogue_navigation.js','catalogue_navigation.css','remote_cache.js','wiki_reader.js','nameplates.js','browser_sources.js','layout_v07.css','font_catalog.js','reading_mode.js','reading_v08.css','catalogue_layout.js','catalogue_layout.css']:
    assert client.get('/static/'+asset).status_code==200
   home=client.get('/')
-  assert 'interactions.js' in home.text and 'readingNavigator' in home.text
+  assert 'interactions.js' in home.text and 'readingNavigator' in home.text and 'catalogue_layout.js' in home.text and 'toggleCatalogue' in home.text
   assert 'media-src' in home.headers['Content-Security-Policy']
-  print(json.dumps({'passed':True,'version':'0.7.0','records':18379,'audit_decisions':699,'checks':['fresh workspace initialization','clean catalogue and JDB exclusion','default settings and no saved keys','English scientific labels preserve raw metadata','local pinyin and random exclusion','expanded/responsive view persistence','view excludes unknown secret fields','unmanaged shutdown unavailable','settings roundtrip','all new static assets served','application lifespan shutdown']}))
+  print(json.dumps({'passed':True,'version':'0.8.0','records':18379,'audit_decisions':699,'checks':['fresh workspace initialization','clean catalogue and JDB exclusion','default settings and no saved keys','English scientific labels preserve raw metadata','local pinyin and random exclusion','expanded/responsive view persistence','view excludes unknown secret fields','unmanaged shutdown unavailable','settings roundtrip','all new static assets served','application lifespan shutdown']}))
 '''
 
 
@@ -183,7 +187,9 @@ def verify(path):
         required=['main.py','launch.py','Start_Atlas.pyw','run.cmd','run_console.cmd','run.sh','desktop/core.py','desktop/gui.py','desktop/win_native.py','atlas/launcher_protocol.py','atlas/anticipation.py','atlas/cache_memory.py','atlas/wiki_languages.py','atlas/web_sources.py','desktop/browser.py','README.md','README.en.md','README.zh-CN.md','static/interactions.js','static/interactions.css','static/atlas-icon.ico','static/atlas-icon.svg','static/catalogue_navigation.js','static/catalogue_navigation.css','static/remote_cache.js','static/wiki_reader.js','tests/test_v07_review3.py','tests/reading_review3_acceptance.cjs','docs/V07_REVIEW3.zh-CN.md','docs/MOTION_RESEARCH_v0.7_review3.zh-CN.md','tests/test_v07_revision.py','tests/revision_acceptance.cjs','docs/MOTION_DESIGN.zh-CN.md','docs/V07_REVIEW_FIXES.zh-CN.md','docs/CACHE_DESIGN.zh-CN.md','data/catalogue.sqlite3','data/other_sources.json','data/source_research/sample_v07.json','data/source_research/live_reading_revision_v07.json']
         required.extend(['atlas/other_sources.py','atlas/search_pages.py','data/verification_v07.json','data/source_research/adapter_audit_v07_review3.json','data/source_research/live_readers_v07_review3.json','data/source_research/search_reader_v07_review3.json'])
         required.extend(['tests/test_v07_followup.py','tests/reading_concurrency_acceptance.cjs','docs/V07_REVIEW4.zh-CN.md'])
+        required.extend(['static/font_catalog.js','static/reading_mode.js','static/reading_v08.css','atlas/typography.py','atlas/nomenclature.py','tests/test_v08.py','tests/test_v08_names.py','tests/naming_review2_acceptance.cjs','tests/reading_v08_acceptance.cjs','tests/reading_v08_concurrency.cjs','docs/V08_REVIEW.zh-CN.md','docs/V08_REVIEW2.zh-CN.md','data/verification_v08.json','data/research_curation/name_audit_v08/names.csv','data/research_curation/name_audit_v08/corrections.json'])
         required.extend(['update.py','Update_Atlas.cmd','Update_Atlas.sh','update_manifest.json','scripts/release_support.py','scripts/build_patch.py','scripts/verify_incremental.py','static/nameplates.js','static/browser_sources.js','static/layout_v07.css','browser_helper/manifest.json','browser_helper/background.js','browser_helper/bridge.js','docs/UPGRADING.zh-CN.md','docs/UPGRADING.en.md','docs/ROADMAP.zh-CN.md','docs/V07_REVIEW5.zh-CN.md','AGENTS.md'])
+        required.extend(['static/catalogue_layout.js','static/catalogue_layout.css','browser_helper/manifest.json','browser_helper/background.js','browser_helper/bridge.js','tests/split_lifecycle_acceptance.cjs','docs/V08_REVIEW4.zh-CN.md'])
         assert all((release/name).is_file() for name in required), 'Missing required release files'
         for name in ['run.cmd','run_console.cmd','Update_Atlas.cmd']:
             raw=(release/name).read_bytes()

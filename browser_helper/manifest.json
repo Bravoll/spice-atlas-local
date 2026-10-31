@@ -1,9 +1,28 @@
 {
   "manifest_version": 3,
   "name": "Spice Atlas Split View Helper",
-  "version": "0.7.0",
+  "version": "0.8.2",
   "description": "Opens approved image-search pages beside your local Spice Atlas tab using the browser's native split API.",
-  "permissions": ["storage"],
-  "background": {"service_worker": "background.js"},
-  "content_scripts": [{"matches": ["http://127.0.0.1/*", "http://localhost/*"], "js": ["bridge.js"], "run_at": "document_idle"}]
+  "permissions": [
+    "storage"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "http://127.0.0.1/*",
+        "http://localhost/*"
+      ],
+      "js": [
+        "bridge.js"
+      ],
+      "run_at": "document_start"
+    }
+  ],
+  "host_permissions": [
+    "http://127.0.0.1/*",
+    "http://localhost/*"
+  ]
 }

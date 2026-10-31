@@ -1,6 +1,6 @@
 [project]
 name = "spice-atlas-local-20261027"
-version = "0.7.0"
+version = "0.8.0"
 description = "SpiceAtlas: a local-first herb and spice reading desk with traceable sources"
 license = "MIT"
 license-files = ["LICENSE"]

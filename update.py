@@ -9,7 +9,7 @@ ROOT_FILES={'AGENTS.md','main.py','launch.py','Start_Atlas.pyw','update.py','Upd
 ROOT_FILES.update({'LICENSE','LICENSE.zh-CN.md'})
 ROOT_DIRS={'atlas','desktop','static','scripts','tests','docs','browser_helper'}
 DATA_DIRS={'source_research','research_curation'}
-DATA_FILES={'other_sources.json','verification_v07.json','catalogue_seed.json','catalogue_manifest.json','image_vocabulary.json','source_policy.json'}
+DATA_FILES={'other_sources.json','verification_v07.json','verification_v08.json','catalogue_seed.json','catalogue_manifest.json','image_vocabulary.json','source_policy.json'}
 MIGRATIONS={'preserve-workspaces-v1'}
 
 class UpdateError(Exception):pass

@@ -30,6 +30,7 @@ function pausePrefetch(){
 function schedulePrefetch(delay=1800){if(resourceUi.stopped)return;clearTimeout(resourceUi.timer);resourceUi.timer=setTimeout(prefetchStep,delay);}
 async function prefetchStep(){
  if(resourceUi.stopped)return;
+ if(state.immersive){schedulePrefetch(30000);return;}
  if(resourceUi.running||resourceUi.inflight||state.restoring||state.runtimePaused||state.prefs.prefetch_enabled===false||!state.id||!state.version||activePopup()||document.hidden||$('imageStatus').dataset.busy||state.article===null||Date.now()-resourceUi.lastAt<1600){schedulePrefetch(1800);return;}
  resourceUi.running=true;const controller=resourceUi.controller=new AbortController(),cap=setTimeout(()=>controller.abort(),26000);
  try{

@@ -25,6 +25,7 @@ class Catalogue:
     def __init__(self, path=None, seed=True):
         self._path = Path(path) if path else None
         self.lock = threading.RLock()
+        self._names_checked=set()
         self.path.parent.mkdir(parents=True, exist_ok=True)
         with self.connect() as db:
             db.executescript("""
@@ -60,6 +61,14 @@ class Catalogue:
     def connect(self):
         db = sqlite3.connect(self.path, timeout=30, factory=ClosingConnection)
         db.row_factory = sqlite3.Row
+        signature=(str(self.path.resolve()),self.path.stat().st_ino)
+        if signature not in self._names_checked:
+            with self.lock:
+                if signature not in self._names_checked:
+                    from .nomenclature import apply
+                    try:
+                        if apply(self,db):self._names_checked.add(signature)
+                    except BaseException:db.close();raise
         return db
 
     def seed(self):
@@ -96,12 +105,12 @@ class Catalogue:
         db.execute("INSERT OR IGNORE INTO membership VALUES(?,?)",(node,key))
         if own:db.commit();db.close()
 
-    def upsert(self,item,db=None):
+    def upsert(self,item,db=None,reindex=True):
         own=db is None;db=db or self.connect()
         key=item["id"]
         old=db.execute("SELECT payload FROM entries WHERE id=?",(key,)).fetchone()
         data={**(json.loads(old[0]) if old else {}),**item}
-        zh=data.get("name_zh") or "";en=data.get("name_en") or data.get("english") or ""
+        zh=data.get("name_zh") or "";en=(data.get('name_en') if 'name_en' in data else data.get('english')) or ''
         scientific=data.get("scientific","")
         wiki=data.get("wiki",{})
         aliases=list(dict.fromkeys([str(x).strip() for x in data.get("aliases",[]) if x and len(str(x))<180 and not re.search(r"https?://|<|>|[\x00-\x1f]",str(x))]));data["aliases"]=aliases
@@ -114,8 +123,9 @@ class Catalogue:
             (key,zh,en,scientific,data.get("family",""),data.get("scope","culinary"),data.get("review_state","candidate"),
              data.get("source",""),str(data.get("source_key","")),data.get("wikidata_id",""),wiki.get("zhwiki",""),wiki.get("enwiki",""),
              json.dumps(data,ensure_ascii=False),text,now_iso()))
-        db.execute("DELETE FROM entry_search WHERE entry_id=?",(key,))
-        db.execute("INSERT INTO entry_search(entry_id,text) VALUES(?,?)",(key,text))
+        if reindex:
+            db.execute("DELETE FROM entry_search WHERE entry_id=?",(key,))
+            db.execute("INSERT INTO entry_search(entry_id,text) VALUES(?,?)",(key,text))
         db.execute("DELETE FROM aliases WHERE entry_id=?",(key,))
         for language,value in [("zh",zh),("en",en),("scientific",scientific),*[("alias",x) for x in aliases]]:
             if value:
@@ -129,7 +139,7 @@ class Catalogue:
         return self.view(json.loads(row[0])) if row else None
 
     def view(self,data):
-        zh=data.get("name_zh") or "";en=data.get("name_en") or data.get("english") or ""
+        zh=data.get("name_zh") or "";en=(data.get('name_en') if 'name_en' in data else data.get('english')) or ''
         data={**data,"name":zh or en or data.get("scientific",""),"english":en or data.get("scientific",""),"name_zh":zh,"name_en":en,
               "aliases":data.get("aliases",[]),"references":data.get("references",{}),"family":data.get("family",""),
               "wiki":data.get("wiki",{}),"intro":data.get("intro",""),"group":data.get("group","reference"),
@@ -148,6 +158,7 @@ class Catalogue:
             data[key+"_hant"]=to_hant(data.get(key,""))
         data["name_hant"]=to_hant(data["name"])
         data["forms"]=[{**f,"name_hant":to_hant(f.get("name",""))} for f in data["forms"]]
+        data.setdefault('name_status',{'zh':'available' if re.search(r'[\u3400-\u9fff]',zh) else 'missing','en':'available' if en and norm(en)!=norm(data.get('scientific','')) else 'missing'})
         return data
 
     def find_wiki(self,source,title):
@@ -194,7 +205,7 @@ class Catalogue:
             SELECT n.*,(SELECT COUNT(*) FROM edges WHERE parent_id=n.id) child_count,c.n entry_count
             FROM nodes n JOIN edges e ON e.child_id=n.id JOIN counts c ON c.root=n.id WHERE e.parent_id=?
             ORDER BY CASE n.kind WHEN 'part' THEN 0 ELSE 1 END,n.label_en""",(parent,parent)).fetchall()
-        return [{**dict(r),"label_hant":to_hant(r["label_zh"] or r["label_en"]),"label":(r["label_zh"] or r["label_en"]) if language.startswith("zh") else (r["label_en"] or r["label_zh"])} for r in rows]
+        return [{**dict(r),"label_hant":to_hant(r["label_zh"] or r["label_en"]),"label":(r["label_zh"] or r["label_en"]) if language.startswith("zh") else (r["label_en"] or r["label_zh"]),'name_status':'available' if r['label_zh'] else 'scientific_only'} for r in rows]
 
     def page(self,q="",scope="all",node=None,offset=0,limit=30,group=None,collection="catalogue",history_order="recent"):
         q=norm(q);params=[];clauses=[]
@@ -217,7 +228,7 @@ class Catalogue:
                 params.append("%"+q.replace("\\","\\\\").replace("%","\\%").replace("_","\\_")+"%")
         if collection in {"favorites","history"}:clauses.append("e.id IN (SELECT entry_id FROM saved."+collection+")")
         where=" AND ".join(clauses) or "1=1"
-        ordering="CASE e.review_state WHEN 'curated' THEN 0 ELSE 1 END,e.name_en,e.id"
+        ordering="CASE e.review_state WHEN 'curated' THEN 0 ELSE 1 END,COALESCE(NULLIF(e.name_en,''),e.scientific),e.id"
         with self.connect() as db:
             if collection in {"favorites","history"}:
                 from .activity import activity
@@ -272,8 +283,8 @@ class Catalogue:
     def related(self,item,limit=8):
         if not item.get("family"):return []
         with self.connect() as db:
-            rows=db.execute("SELECT id,name_zh,name_en,scope FROM entries WHERE family=? AND id<>? ORDER BY CASE review_state WHEN 'curated' THEN 0 ELSE 1 END,name_en LIMIT ?",(item["family"],item["id"],limit)).fetchall()
-        return [{**dict(r),"name_hant":to_hant(r["name_zh"] or r["name_en"]),"name":r["name_zh"] or r["name_en"],"english":r["name_en"],"reason":"同科 / Same family: "+item["family"]} for r in rows]
+            rows=db.execute("SELECT id,name_zh,name_en,scientific,scope FROM entries WHERE family=? AND id<>? ORDER BY CASE review_state WHEN 'curated' THEN 0 ELSE 1 END,COALESCE(NULLIF(name_en,''),scientific) LIMIT ?",(item["family"],item["id"],limit)).fetchall()
+        return [{**dict(r),"name_hant":to_hant(r["name_zh"] or r["name_en"] or r['scientific']),"name":r["name_zh"] or r["name_en"] or r['scientific'],"english":r["name_en"] or r['scientific'],"reason":"同科 / Same family: "+item["family"]} for r in rows]
 
 
 catalogue=Catalogue()

@@ -4,6 +4,50 @@ English · [简体中文](CHANGELOG.zh-CN.md)
 
 Changes use **Added**, **Changed** and **Fixed**, followed by validation and limitations. Historical 0.1–0.3 entries were reconstructed from the saved design brief and archived release notes. They do not imply that Git tags or commits existed then.
 
+## 0.8.0 — 2026-11-01
+
+### Fourth review · split helper 0.8.2
+
+- Explicitly identify Edge without an automatic split API and retain a working source-tab link.
+- Close the helper-owned source partner when returning to Commons/Bing, embeddable sources or reading mode; serialize creation/cleanup and preserve unrelated user splits.
+- Add a catalogue toggle, drag/keyboard resizing and browser-local preferences; collapse temporarily during splits and restore afterwards, with an overlay on narrow views.
+- Adapt narrow headers, nameplates, articles and galleries. Current native split APIs cannot set 2:1 automatically; use the browser divider.
+
+### Third review · split helper 0.8.1
+
+- Recover from late bridge injection, missing optional Tab.url and empty responses; announce readiness and reconnect on retry.
+- Explicitly create and verify native splits with matching pinned/group states, reuse helper-owned tabs after failures, and show the reason.
+- Offer a split even when thumbnails exist but embedding is denied; retain bounded real actions across slow source checks and reject stale entries.
+- Reload the updated extension in extension management, then refresh Atlas. The app stays v0.8.0; real browser installation and splits remain device checks.
+
+### Second review · 2026-10-31
+
+- Fixed abstract chapter hit positions while labels expand; an explicit click stays selected until manual scrolling.
+- Audited all 18,379 record identities; added 1,046 Chinese names and 148 checklist family/genus placements. Missing vernacular names are labelled, and source evidence plus a full sampling CSV are included. 15,798 Chinese names remain unconfirmed.
+- Added backup-backed, conservative per-workspace field repair that preserves user changes. The same-version v0.8 candidate is a supported update source.
+
+
+### Added
+
+- Immersive reading with local header search, retained identity/pronunciation, complete Wikipedia body and Commons groups only when pictures exist; hidden catalogue and low-frequency source controls.
+- Collapsible chapter marks with keyboard/touch access and visibility-based active-section tracking. Loading and retry states reject obsolete requests.
+- Language-ordered nameplates and a 31-family font catalogue with localized aliases, manual family entry and optional, click-initiated local font access. Font defaults belong to collection workspaces.
+
+### Changed
+
+- Reading mode, name fonts and the exploratory return state participate in saved views and Back/Forward. Exiting restores the previous source, filters, image window and scroll.
+- Full packages carry actual 0.6→0.7→0.8 migrations; a smaller 0.7→0.8 patch preserves data, paths and the existing environment. No new third-party requirements.
+
+### Fixed
+
+- Optional developer preview now starts the checked-in synthetic fixture instead of a removed screenshot helper.
+- Late image/article results and superseded mode exits cannot replace the current reading state; Home resets temporary choices, not personal history.
+- Exiting reading restores the original whole-page scroll position on narrow layouts. The compressed source-checkout seed and checksum are regenerated as a matching pair.
+
+### Validation
+
+227 backend tests and 190 UI checks, controlled concurrency and font-permission cases, Chrome synthetic-layout checks and isolated real-package upgrades. Native Windows and actual local-font permission prompts remain device checks; see `data/verification_v08.json`.
+
 ## 0.7.0 — 2026-10-30
 
 ### Public project documentation

@@ -35,12 +35,17 @@ async def enrich_labels(ids):
 
 
 def apply_labels(item,entity):
+    names=[x.get('mainsnak',{}).get('datavalue',{}).get('value') for x in entity.get('claims',{}).get('P225',[])]
+    if item.get('scientific') and names and not any(isinstance(x,str) and norm(x)==norm(item['scientific']) for x in names):
+        item['label_resolution_note']='Scientific identity mismatch; labels not transferred'
+        return item
     labels=entity.get("labels",{});aliases=entity.get("aliases",{})
     zh=next((labels[k]["value"] for k in ["zh-hans","zh-cn","zh"] if k in labels),"")
     en=labels.get("en",{}).get("value","")
     extra=[x["value"] for lang in ["zh","zh-hans","zh-cn","en"] for x in aliases.get(lang,[])]
-    if zh:item["name_zh"]=zh
-    if en:item["name_en"]=en
+    protected=item.get('review_state')=='curated' or item.get('name_provenance',{}).get('revision')
+    if zh and not protected:item["name_zh"]=zh
+    if en and not protected:item["name_en"]=en
     item["aliases"]=list(dict.fromkeys([*item.get("aliases",[]),*extra]))
     item["wiki"]={**item.get("wiki",{}),**{site:link["title"] for site,link in entity.get("sitelinks",{}).items() if site in WIKIS}}
     item["wikidata_id"]=entity.get("id",item.get("wikidata_id",""))
@@ -256,10 +261,10 @@ class Jobs:
                     genus_node="gbif-genus-"+str(genus_key)
                     catalogue.node(genus_node,"",genus,"genus","botanical","https://www.gbif.org/species/"+str(genus_key),parent=family_node,db=db)
                     vernacular=record.get("vernacularNames") or []
-                    zh=next((x.get("vernacularName","") for x in vernacular if x.get("language") in {"zho","chi","zh"}),"")
-                    en=next((x.get("vernacularName","") for x in vernacular if x.get("language") in {"eng","en"}),"")
+                    zh=next((x.get("vernacularName","") for x in vernacular if x.get("language") in {"zho","chi","zh"} and re.search(r'[\u3400-\u9fff]',x.get('vernacularName',''))),"")
+                    en=next((x.get("vernacularName","") for x in vernacular if x.get("language") in {"eng","en"} and norm(x.get('vernacularName',''))!=norm(scientific)),"")
                     aliases=[record.get("scientificName",""),*[x.get("vernacularName","") for x in vernacular]]
-                    item={"id":key,"name_zh":zh,"name_en":en or scientific,"scientific":scientific,"family":name,"genus":genus,
+                    item={"id":key,"name_zh":zh,"name_en":en,"scientific":scientific,"family":name,"genus":genus,
                           "scope":"botanical","review_state":"reference_only","source":"gbif","source_key":str(record["key"]),
                           "aliases":aliases,"wiki":{},"gbif_key":record["key"],"dataset_key":BACKBONE,
                           "scope_note":"植物分类参考记录，未核实食用或调味用途。 / Botanical reference; culinary use is not verified.",
@@ -270,7 +275,11 @@ class Jobs:
                         previous=db.execute('SELECT payload FROM entries WHERE id=?',(existing,)).fetchone()
                         old=json.loads(previous[0]);key=existing
                         if old.get('review_state')=='curated':item={**old,'references':{**old.get('references',{}),**item['references']}}
-                        else:item={**old,**item,'id':key}
+                        else:
+                            item={**old,**item,'id':key}
+                            if old.get('name_provenance'):
+                                for field in ('name_zh','name_en','name_status','name_provenance','family_zh'):item[field]=old.get(field)
+                                item['aliases']=list(dict.fromkeys([*old.get('aliases',[]),*item.get('aliases',[])]))
                     catalogue.upsert(item,db=db);catalogue.member(genus_node,key,db=db)
             job["progress"]+=len(results)
             if state["offset"]==0:job["total"]+=int(data.get("count",len(results)))

@@ -35,7 +35,7 @@ async function loadTreePage(){
   catalogNav.treeTotal=result.total??result.nodes.length;
   if(catalogNav.treeOffset&&catalogNav.treeOffset>=catalogNav.treeTotal){catalogNav.treeOffset=0;return loadTreePage();}
   if(result.labels)state.path=state.path.map(row=>({...row,label:result.labels[row.id]||row.label}));crumbs();
-  $('catalogTree').innerHTML=result.nodes.map(n=>'<button type="button" data-node="'+esc(n.id)+'" title="'+esc(state.locale==='zh-Hant'?n.label_hant:n.label)+'"><span>'+esc(state.locale==='zh-Hant'?n.label_hant:n.label)+'</span><small>'+esc(n.child_count?'› '+n.child_count:n.entry_count||'')+'</small></button>').join('');
+  $('catalogTree').innerHTML=result.nodes.map(n=>'<button type="button" data-node="'+esc(n.id)+'" title="'+esc((state.locale==='zh-Hant'?n.label_hant:n.label)+(n.name_status==='scientific_only'?' · '+t('scientificCategoryOnly'):''))+'"><span>'+esc(state.locale==='zh-Hant'?n.label_hant:n.label)+'</span><small>'+esc(n.child_count?'› '+n.child_count:n.entry_count||'')+'</small></button>').join('');
   $('catalogTree').querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{const n=result.nodes.find(x=>x.id===b.dataset.node);if(state.path.some(p=>p.id===n.id))return;state.node=n.id;state.path.push({id:n.id,label:state.locale==='zh-Hant'?n.label_hant:n.label});state.group='all';catalogNav.treeOffset=0;act({type:'browse'});}));
   $('catalogTreeViewport').scrollTop=0;updateTreePager();revealList($('catalogTree'),'[data-node]');
  }catch(error){if(epoch===state.treeEpoch)$('catalogTree').innerHTML='<p class="subtle-note">'+esc(errorMessage(error))+'</p>';}

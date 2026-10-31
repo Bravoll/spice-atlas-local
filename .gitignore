@@ -23,6 +23,7 @@ data/updates/
 data/update.lock
 data/install_state.json
 data/update_history.jsonl
+data/catalogue_backups/
 data/cache.sqlite3
 *-wal
 *-shm

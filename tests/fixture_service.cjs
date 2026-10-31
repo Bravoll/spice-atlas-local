@@ -23,7 +23,7 @@ function createFixture(root){
   else if(u.pathname==='/api/cache/stats')result={rows:['entry','form','source','imageProfile','provider','language','translate','refreshArticle','refreshImages'].map(kind=>({kind,history:0,session:0,recent:0,score:0})),packets:[],retained_resources:0,memory:{records:0,bytes:0},session_total:0,effective_weights:{history:1,session:0,recent:0}};
   else if(u.pathname.startsWith('/api/cache/'))result={ok:true};
   else if(u.pathname==='/api/ui-events')result={ok:true};
-  else if(u.pathname==='/api/status')result={version:'0.7.0',...runtimeState};
+  else if(u.pathname==='/api/status')result={version:'0.8.0',...runtimeState};
   else if(u.pathname==='/api/health/round')result={...health(),probes:[]};
   else if(u.pathname==='/api/health')result=health();
   else if(u.pathname==='/api/browser-plan/health')result={probes:[{id:'commons',url:'https://commons.wikimedia.org/w/api.php',params:{action:'query',origin:'*'}}]};

@@ -155,7 +155,7 @@ function keyboardCommands(event){
  const shortcuts=configuredShortcuts();if(key===shortcuts.tree_previous||key===shortcuts.tree_next){event.preventDefault();treePageCommand(key===shortcuts.tree_next?1:-1);return;}
  if(key===shortcuts.entry_previous||key===shortcuts.entry_next){event.preventDefault();pageCommand(key===shortcuts.entry_next?1:-1);return;}
  if(key==='n'||key==='p'){event.preventDefault();pageCommand(key==='n'?1:-1);}
- else if(event.key==='/'){event.preventDefault();$('search').focus();$('search').select?.();}
+ else if(event.key==='/'){event.preventDefault();(state.immersive?$('readingSearch'):$('search')).focus();$('search').select?.();}
 }
 
 function showImageViewer(image,origin){
